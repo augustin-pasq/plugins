@@ -40,6 +40,7 @@ function AutoSaveSwitch({ settingKey, onSave, defaultValue, helperText = null })
 
 interface pluginConfig {
   linkHRelToKs: boolean;
+  loadCRDsByDefault: boolean;
 }
 
 export const store = new ConfigStore<pluginConfig>('@headlamp-k8s/flux');
@@ -61,6 +62,17 @@ export function FluxSettings() {
           settingKey="linkHRelToKs"
           defaultValue={currentConfig?.linkHRelToKs}
           onSave={handleSave}
+        />
+      ),
+    },
+    {
+      name: 'Load Flux CRDs by default',
+      value: (
+        <AutoSaveSwitch
+          settingKey="loadCRDsByDefault"
+          defaultValue={currentConfig?.loadCRDsByDefault}
+          onSave={handleSave}
+          helperText="If enabled, Flux CRDs will be displayed by default. This may impact performance on clusters with many resources."
         />
       ),
     },

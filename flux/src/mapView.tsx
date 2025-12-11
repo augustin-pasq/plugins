@@ -20,6 +20,11 @@ export const makeKubeToKubeEdge = (from: any, to: any): any => ({
   target: to.metadata.uid,
 });
 
+const useFluxConfig = () => {
+  const useConf = store.useConfig();
+  return useConf();
+};
+
 const GitRepositoryDetails = ({ node }) => (
   <FluxSourceDetailView
     pluralName="gitrepositories"
@@ -87,8 +92,7 @@ const helmRepositorySource: any = {
     const [repositories] = HelmRepository.useList();
     const [releases] = HelmRelease.useList();
 
-    const useConf = store.useConfig();
-    const config = useConf();
+    const config = useFluxConfig();
 
     return useMemo(() => {
       if (!repositories || !releases) return null;
@@ -177,8 +181,7 @@ const kustomizationSource = {
     const [kustomizations] = Kustomization.useList({ namespace: useNamespaces() });
     const [ociRepositories] = OCIRepository.useList();
 
-    const useConf = store.useConfig();
-    const config = useConf();
+    const config = useFluxConfig();
 
     return useMemo(() => {
       if (
@@ -336,6 +339,7 @@ export const fluxSource = {
   id: 'flux',
   label: 'Flux',
   icon: <Icon icon="simple-icons:flux" width="100%" height="100%" color="rgb(50, 108, 229)" />,
+  isEnabledByDefault: store.get()?.loadCRDsByDefault,
   sources: [
     gitRepositorySource,
     helmReleaseSource,
