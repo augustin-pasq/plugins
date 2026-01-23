@@ -121,7 +121,7 @@ const helmRepositorySource: any = {
         nodes,
         edges,
       };
-    }, [repositories, releases]);
+    }, [repositories, releases, config]);
   },
 };
 
@@ -226,7 +226,10 @@ const kustomizationSource = {
             ) {
               edges.push(makeKubeToKubeEdge(release, gitRepository));
             } else {
-              nodes.find(n => n.id === release.metadata.uid).weight += 10;
+              const node = nodes.find(n => n.id === release.metadata.uid)
+              if (node) {
+                node.weight = 1200;
+              }
             }
           });
 
@@ -288,6 +291,7 @@ const kustomizationSource = {
       helmRepositories,
       kustomizations,
       ociRepositories,
+      config,
     ]);
   },
 };

@@ -6,7 +6,14 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Switch from '@mui/material/Switch';
 import { useEffect, useState } from 'react';
 
-function AutoSaveSwitch({ settingKey, onSave, defaultValue, helperText = null }) {
+interface AutoSaveSwitchProps {
+  settingKey: keyof PluginConfig;
+  onSave: (key: keyof PluginConfig, value: boolean) => void;
+  defaultValue: boolean;
+  helperText?: string | null;
+}
+
+function AutoSaveSwitch({ settingKey, onSave, defaultValue, helperText = null }: AutoSaveSwitchProps) {
   const [value, setValue] = useState(defaultValue);
   const [timer, setTimer] = useState(null);
 
@@ -38,16 +45,23 @@ function AutoSaveSwitch({ settingKey, onSave, defaultValue, helperText = null })
   );
 }
 
-interface pluginConfig {
+interface PluginConfig {
   linkHRelToKs: boolean;
 }
 
-export const store = new ConfigStore<pluginConfig>('@headlamp-k8s/flux');
+const DEFAULT_CONFIG: PluginConfig = {
+  linkHRelToKs: false,
+};
+
+export const store = new ConfigStore<PluginConfig>('@headlamp-k8s/flux');
 
 export function FluxSettings() {
-  const [currentConfig, setCurrentConfig] = useState<pluginConfig>(() => store.get());
+  const [currentConfig, setCurrentConfig] = useState<PluginConfig>(() => ({
+    ...DEFAULT_CONFIG,
+    ...store.get(),
+  }));
 
-  function handleSave(key: keyof pluginConfig, value: boolean) {
+  function handleSave(key: keyof PluginConfig, value: boolean) {
     const updatedConfig = { ...currentConfig, [key]: value };
     store.set(updatedConfig);
     setCurrentConfig(updatedConfig);
