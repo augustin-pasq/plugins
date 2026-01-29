@@ -13,7 +13,12 @@ interface AutoSaveSwitchProps {
   helperText?: string | null;
 }
 
-function AutoSaveSwitch({ settingKey, onSave, defaultValue, helperText = null }: AutoSaveSwitchProps) {
+function AutoSaveSwitch({
+  settingKey,
+  onSave,
+  defaultValue,
+  helperText = null,
+}: AutoSaveSwitchProps) {
   const [value, setValue] = useState(defaultValue);
   const [timer, setTimer] = useState(null);
 

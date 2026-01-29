@@ -226,7 +226,7 @@ const kustomizationSource = {
             ) {
               edges.push(makeKubeToKubeEdge(release, gitRepository));
             } else {
-              const node = nodes.find(n => n.id === release.metadata.uid)
+              const node = nodes.find(n => n.id === release.metadata.uid);
               if (node) {
                 node.weight = 1200;
               }
