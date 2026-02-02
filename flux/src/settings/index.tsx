@@ -4,13 +4,13 @@ import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import FormHelperText from '@mui/material/FormHelperText';
 import Switch from '@mui/material/Switch';
-import { useEffect, useState } from 'react';
+import { type ChangeEvent, type ReactNode, useEffect, useState } from 'react';
 
 interface AutoSaveSwitchProps {
   settingKey: keyof PluginConfig;
   onSave: (key: keyof PluginConfig, value: boolean) => void;
-  defaultValue: boolean;
-  helperText?: string | null;
+  defaultValue?: boolean;
+  helperText?: ReactNode;
 }
 
 function AutoSaveSwitch({
@@ -20,9 +20,9 @@ function AutoSaveSwitch({
   helperText = null,
 }: AutoSaveSwitchProps) {
   const [value, setValue] = useState(defaultValue);
-  const [timer, setTimer] = useState(null);
+  const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleChange = event => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked;
     setValue(newValue);
 
